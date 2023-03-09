@@ -1,15 +1,14 @@
 <script lang="ts">
   import EmailAndPasswordLogin from "$lib/firebase/EmailAndPasswordLogin.svelte";
   import { getFirebaseAuthInstance } from "$lib/firebase/client";
-  import type { User } from "firebase/auth";
   import { onMount } from "svelte";
+  import { currentUser } from '$lib/store';
 
   const auth = getFirebaseAuthInstance();
-  let currentUser: User | null;  
 
   onMount(() => {
     auth.onAuthStateChanged((user) => {
-        currentUser = user;
+        currentUser.set(user);
     });
   });
 
@@ -20,13 +19,24 @@
 
 <h1>Welcome to Firebase Authentication with Sveltekit</h1>
 
-{#if !currentUser}
+{#if !$currentUser}
     <h4>Please login using the form below</h4>
 
-    <EmailAndPasswordLogin />
+    <EmailAndPasswordLogin/>
 {:else} 
-    <h4>Congratulations <b>{currentUser?.email}</b> you are logged in client side!</h4>
+    <h4>Congratulations <b>{$currentUser?.email}</b> you are logged in client side!</h4>
 
     <button type="button" on:click|preventDefault={logout}>Logout</button>
 {/if}
+
+<h4>Try navigating to one of the pages below, I dare you</h4>
+
+<ul>
+    <li>
+        <a href="/protected">Restricted Page</a>
+    </li>
+    <li>
+        <a href="/protected/admin">Admin Page</a>
+    </li>
+</ul>
 
