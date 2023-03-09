@@ -23,6 +23,9 @@
     <h4>Please login using the form below</h4>
 
     <EmailAndPasswordLogin/>
+
+    <p>Can\'t remember your password?'</p>
+    <a href="/login/reset-password">Reset Password</a>
 {:else} 
     <h4>Congratulations <b>{$currentUser?.email}</b> you are logged in client side!</h4>
 
