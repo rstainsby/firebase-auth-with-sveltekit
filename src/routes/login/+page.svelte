@@ -3,6 +3,7 @@
   import { getFirebaseAuthInstance } from "$lib/firebase/client";
   import { onMount } from "svelte";
   import { currentUser } from '$lib/store';
+  import GoogleAuthLogin from "$lib/firebase/GoogleAuthLogin.svelte";
 
   const auth = getFirebaseAuthInstance();
 
@@ -26,6 +27,10 @@
 
     <p>Can\'t remember your password?'</p>
     <a href="/login/reset-password">Reset Password</a>
+
+    <p>or</p>
+
+    <GoogleAuthLogin></GoogleAuthLogin>
 {:else} 
     <h4>Congratulations <b>{$currentUser?.email}</b> you are logged in client side!</h4>
 

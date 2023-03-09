@@ -8,7 +8,7 @@
         const auth: Auth = getFirebaseAuthInstance();
         const email = new FormData(currentTarget).get('email') as string;
         const actionCall = {
-            url: `${window.location.href}/password-reset`,
+            url: `${window.location.href}/login/password-reset`,
             handleCodeInApp: true
         };
 
