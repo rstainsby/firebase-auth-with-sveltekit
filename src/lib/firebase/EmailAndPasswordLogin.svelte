@@ -48,16 +48,15 @@
     };
 </script>
 
-<form action="/api/auth/login" method="POST" on:submit|preventDefault={handleSubmit}>
-    <label>
-        Email
-        <input type="email" name="email" required>
-    </label>
-    <label>
-        Password
-        <input type="password" name="password" required>
-    </label>
-    <button type="submit">Login</button>
+<form class="sign-in-form" action="/api/auth/login" method="POST" on:submit|preventDefault={handleSubmit}>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" aria-label="email" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" aria-label="password" required>
+
+    <a href="/reset-password">Forgot password?</a>
+    
+    <button type="submit">Sign in</button>
 </form>
 
 {#if state == 'verifying'}
@@ -66,3 +65,65 @@
     <p>Unable to login, please try again.</p>
 {/if}
 
+<style>
+    .sign-in-form {
+        display: block;
+    }
+
+    label,
+    input,
+    button,
+    a {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        transition: 150ms ease-in;
+    }
+
+    label {
+        margin-bottom: 0.5em;
+        color: var(--cl-navy-blue);
+    }
+
+    input {
+        font-size: 20px;
+        height: 30px;
+        margin-bottom: 0.75em;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid var(--cl-navy-blue);
+    }
+
+    input:focus {
+        outline: none;
+        border-bottom: 2px solid var(--cl-orange-brown);
+    }
+
+    a {
+        text-align: right;
+        margin-bottom: 1.5em;
+        color: var(--cl-navy-blue);
+        text-decoration: none;
+    }
+
+    a:focus, a:hover {
+        color: var(--cl-orange-brown);
+    }
+
+    button {
+        font-size: 20px;
+        font-weight: 300;
+        padding: 0.5em 1.25em;
+        background-color: var(--cl-navy-blue);
+        border: none;
+        border-radius: 8px;
+        color: var(--cl-bright-white);
+    }
+
+    button:focus, button:hover {
+        cursor: pointer;
+        color: var(--cl-bright-white);
+        background-color: var(--cl-orange-brown);
+    }
+</style>
