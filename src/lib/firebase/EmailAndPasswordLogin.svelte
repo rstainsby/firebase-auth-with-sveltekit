@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { applyAction, deserialize, enhance } from "$app/forms";
+    import { applyAction, deserialize } from "$app/forms";
     import { invalidateAll } from "$app/navigation";
-    import { signInWithEmailAndPassword } from "firebase/auth";
-    import { getFirebaseAuthInstance } from "./client";
+    import { emailAndPasswordSignIn } from "./client";
 
     type FormState = 'idle' | 'verifying' | Error;
 
@@ -14,41 +13,21 @@
         const password = formData.get('password') as string;
         
         try {
+            state = 'verifying';
+
             // login client-side
-            const token = await login(email, password);
+            const { res, err } = await emailAndPasswordSignIn(email, password);
 
-            // validate login server-side
-            const res = await fetch(currentTarget.action, {
-                method: currentTarget.method,
-                headers: new Headers({ Authorization: `Bearer ${token}`})
-            });
+            if (err) throw new Error(err);
 
-            // check form submission and reload all data on successful submission
-            const result = deserialize(await res.text());
-
-            if (result.type === "success") {
-                await invalidateAll();
-            }
-
-            // populate form
-            // will redirect if redirect thrown in action
-            // show error page if error thrown in action
-            applyAction(result)
+            await invalidateAll();            
         } catch (error) {
             state = error as Error;
         }
     };
-
-    const login = async (email: string, password: string) => {
-        const auth = getFirebaseAuthInstance();        
-        const credentials = await signInWithEmailAndPassword(auth, email, password);
-        const token = await credentials.user.getIdToken();
-                
-        return token;
-    };
 </script>
 
-<form class="sign-in-form" action="/api/auth/login" method="POST" on:submit|preventDefault={handleSubmit}>
+<form class="sign-in-form" on:submit|preventDefault={handleSubmit}>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" aria-label="email" required>
     <label for="password">Password</label>

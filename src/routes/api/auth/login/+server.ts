@@ -1,7 +1,6 @@
 import { redirect, type RequestHandler } from "@sveltejs/kit";
 
 export const POST = (({ request, cookies }) => {
-    console.log('logging in server side')
     const authHeader = request.headers.get('Authorization');
 
     if (!authHeader) throw console.error(401, 'unable to authenticate');

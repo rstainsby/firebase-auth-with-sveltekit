@@ -1,34 +1,8 @@
 <script lang="ts">
-  import { error } from "@sveltejs/kit";
-    import type { Auth } from "firebase/auth";
-    import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-    import { getFirebaseAuthInstance } from "./client";
-
-    let status: 'idle' | Error = 'idle';
-
-    const handleClick = async () => {
-        const token = await loginWithGoogleAuth();
-
-        await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: new Headers({ Authorization: `Bearer ${token}`})
-        }).catch(error => {
-            status = error as Error;
-            console.error('unable to login');
-        });
-    }
-
-    const loginWithGoogleAuth = async () => {
-        const auth: Auth = getFirebaseAuthInstance();
-        const credentials = await signInWithPopup(auth, new GoogleAuthProvider());
-        const token = await credentials.user.getIdToken();
-
-        return token;
-    }
-
+    import { googleSignIn } from "./client";
 </script>
 
-<button type="button" on:click={handleClick} aria-label="google authentication sign-in">
+<button type="button" on:click={googleSignIn} aria-label="google authentication sign-in">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
         <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
           <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
@@ -40,10 +14,6 @@
 
     Sign-in with Google
 </button>
-
-{#if status instanceof Error}
-    <p>There was a problem logging you in with Google, please try again.</p>
-{/if}
 
 <style>
     button {
@@ -61,7 +31,5 @@
 
     button:focus, button:hover {
         filter: brightness(90%);
-    }
-
-    
+    }    
 </style>

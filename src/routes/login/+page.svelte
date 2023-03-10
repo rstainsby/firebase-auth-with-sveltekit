@@ -1,21 +1,10 @@
 <script lang="ts">
-  import EmailAndPasswordLogin from "$lib/firebase/EmailAndPasswordLogin.svelte";
-  import { getFirebaseAuthInstance } from "$lib/firebase/client";
-  import { onMount } from "svelte";
   import { currentUser } from '$lib/store';
-  import GoogleAuthLogin from "$lib/firebase/GoogleAuthLogin.svelte";
   import UserLogin from "$lib/UserLogin.svelte";
-
-  const auth = getFirebaseAuthInstance();
-
-  onMount(() => {
-    auth.onAuthStateChanged((user) => {
-        currentUser.set(user);
-    });
-  });
+  import { signOut } from "$lib/firebase/client";
 
   const logout = () => {
-    auth.signOut();
+    signOut();
   }
 </script>
 
