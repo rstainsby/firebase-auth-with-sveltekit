@@ -7,6 +7,10 @@ export const handle = (async ({ event, resolve }) => {
     const authToken = cookies.get('auth') as string;
     const user = authToken ? await getUserFromToken(authToken) : null;
 
+    if (event.url.pathname.startsWith('/login') && user) {
+        throw redirect(303, '/protected');
+    }
+
     if (event.url.pathname.startsWith('/protected')) {
         if (!user) {
             throw redirect(303, '/login');

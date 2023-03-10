@@ -1,15 +1,13 @@
-import { redirect, type RequestHandler } from "@sveltejs/kit";
+import { error, redirect, type RequestHandler } from "@sveltejs/kit";
 
 export const POST = (({ request, cookies }) => {
     const authHeader = request.headers.get('Authorization');
 
-    if (!authHeader) throw console.error(401, 'unable to authenticate');
+    if (!authHeader) throw error(401, 'unable to authenticate');
 
     const [scheme, token] = authHeader.split(' ');
 
-    if (scheme != 'Bearer' || !token) throw console.error(401, 'unable to authenticate');
-
-    console.log('creating auth cookie', token);
+    if (scheme != 'Bearer' || !token) throw error(401, 'unable to authenticate');
 
     cookies.set("auth", token, {
         path: '/',

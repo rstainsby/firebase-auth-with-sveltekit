@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { applyAction, deserialize } from "$app/forms";
-    import { invalidateAll } from "$app/navigation";
     import { emailAndPasswordSignIn } from "./client";
 
     type FormState = 'idle' | 'verifying' | Error;
@@ -18,16 +16,14 @@
             // login client-side
             const { res, err } = await emailAndPasswordSignIn(email, password);
 
-            if (err) throw new Error(err);
-
-            await invalidateAll();            
+            if (err) throw new Error(err);        
         } catch (error) {
             state = error as Error;
         }
     };
 </script>
 
-<form class="sign-in-form" on:submit|preventDefault={handleSubmit}>
+<form class="sign-in-form" on:submit={handleSubmit}>
     <label for="email">Email</label>
     <input type="email" name="email" id="email" aria-label="email" required>
     <label for="password">Password</label>
