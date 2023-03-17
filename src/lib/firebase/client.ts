@@ -1,7 +1,7 @@
 import { goto } from "$app/navigation";
 import { PUBLIC_FIREBASE_API_KEY, PUBLIC_FIREBASE_AUTH_DOMAIN, PUBLIC_FIREBASE_PROJECT_ID, PUBLIC_FIREBASE_STORAGE_BUCKET, PUBLIC_FIREBASE_MESSAGING_SENDER_ID, PUBLIC_FIREBASE_APP_ID, PUBLIC_FIREBASE_MEASUREMENT_ID } from "$env/static/public";
 import { getApps, getApp, initializeApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, setPersistence, inMemoryPersistence, type Auth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, type UserCredential } from 'firebase/auth';
+import { getAuth, setPersistence, inMemoryPersistence, type Auth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, type UserCredential } from 'firebase/auth';
 import { currentUser } from "$lib/store";
 
 const firebaseConfig = {
@@ -28,6 +28,15 @@ export async function googleSignIn() {
     const credentials = signInWithPopup(auth, new GoogleAuthProvider());
 
     return loginHandler(credentials);
+}
+
+export async function sendPasswordReset(email: string) {
+    const actionCall = {
+        url: `${window.location.href}/login/password-reset`,
+        handleCodeInApp: true
+    };
+
+    return sendPasswordResetEmail(auth, email, actionCall);
 }
 
 export async function signOut() {
