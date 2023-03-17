@@ -63,7 +63,7 @@ const loginHandler = async (credPromise: Promise<UserCredential>) => {
     return { res, err };
 }
 
-const sendTokenToServer = async (token: string) => {
+export const sendTokenToServer = async (token: string) => {
     return await fetch('/api/auth/login', {
         method: 'POST',
         headers: new Headers({ Authorization: `Bearer ${token}`})
