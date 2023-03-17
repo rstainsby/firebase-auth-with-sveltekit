@@ -32,8 +32,14 @@ export async function googleSignIn() {
 
 export async function signOut() {
     try {
-        await auth.signOut();
-        await signOutOfServerSession();
+        const res = await signOutOfServerSession();
+        
+        if (res.ok) {
+            await auth.signOut();
+            currentUser.set(null);
+        } else {
+            throw new Error('Failed to sign out of server session');
+        }
     } catch (err) {
         console.error('Unable to sign out', err);
     }
